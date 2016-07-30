@@ -1,1 +1,3 @@
 config.py
+Google_Auth.json
+*.pyc
