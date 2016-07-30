@@ -8,8 +8,7 @@ import challonge
 # config
 import config
 
-# Permanent Defenitons
-BOT_CMD_SYMBOL = '!'
+BOT_CMD_SYMBOL = config.BOT_CMD_SYMBOL
 client = discord.Client()
 roles = []
 
@@ -17,13 +16,16 @@ roles = []
 challonge.set_credentials(config.CHAL_USER, config.CHAL_API)
 # Retrieve a tournament by its id (or its url).
 tournament = challonge.tournaments.show('Test_Tourno')
+# Log the number of tournaments found
+print("{} tournaments found under this account.".format(len(challonge.tournaments.index())))
+
 print(tournament["id"]) # 3272
 print(tournament["name"]) # My Awesome Tournament
 print(tournament["started-at"]) # None
 
-'''
-Helper Methods
-'''
+# --------------
+# Helper Methods
+# --------------
 
 # Check if message is a command
 def isCmd(message):
@@ -31,6 +33,33 @@ def isCmd(message):
         return True
     return False
 
+# Clean input
+def sanitiseCmd(message):
+    # Remove white space sequences
+    message = ' '.join(message.split())
+    # Grab words
+    words = message.split(' ')
+    return words
+
+# Get command
+def getCmd(message):
+    words = sanitiseCmd(message)
+    # Extract command
+    command = words[0][1:].upper()
+    return command
+
+# Get arguments
+def getArgs(message):
+    words = sanitiseCmd(message)
+    # Extract arguments
+    arguments = words[1:]
+    if len(arguments) == 0:
+        return False
+    return arguments
+
+# --------------
+# Discord Events
+# --------------
 
 # Bot Ready
 @client.event
@@ -40,6 +69,7 @@ async def on_ready():
     for server in client.servers:
         print('{} ({})'.format(server.name, server.id))
         print('------')
+
     # Cache server roles
     print('Roles')
     print('------')
@@ -57,28 +87,41 @@ async def on_message(message):
     # Check if message is a command
     if isCmd(message.content):
         # Log command to console
-        command = message.content.split(' ')[0][1:].upper()
+        command = getCmd(message.content)
+        arguments = getArgs(message.content)
         print("{} ({}) used the following command: {}".format(message.author.name, message.author.id, command))
-        # Send message of to be Logged
-        #command_log(message.author.name, message.author.id, message.content)
-
+        # Send message of to be logged
+        # command_log(message.author.name, message.author.id, message.content)
     else:
         return
 
-    # Extract arguments
-    arguments = message.content.split(' ')[1:]
-    if len(arguments) == 0:
-        arguments = False
-    # await client.send_message(message.channel, "command: {}".format(command))
-    # await client.send_message(message.channel, "arguments: {}".format(arguments))
+    # Command: Send brief details regarding a specific tournament
+    if command == "META":
+        # No argument provided
+        if arguments == False:
+            await client.send_message(message.channel, "Please add the ID of the tournament you wish to see. ie. If the URL is **http://challonge.com/test** then type **'{}{} test**'".format(BOT_CMD_SYMBOL, command.lower()))
+        else:
+            tournament = challonge.tournaments.show(arguments[0])
+            await client.send_message(message.channel, "***Tournament details:***```ID: {}\nName: {}\nStarted at: {}\nState: {}```".format(tournament["id"],tournament["name"],tournament["started-at"],tournament["state"]))
 
+    # Command: Send full responses for active tournaments associated to an account
     if command == "DETAILS":
-        await client.send_message(message.channel, "***Tournoment details:***```ID: {}\nName: {}\nStarted at: {}\nState: {}```".format(tournament["id"],tournament["name"],tournament["started-at"],tournament["state"]))
-    if command =="EXT_DET":
-        output = ''
-        for x in tournament:
-            output += '{}: {}\n'.format(x,tournament[x])
-        await client.send_message(message.channel, "***Full Tournoment Details:\n ```{}``` ".format(output))
+        count = 0
+        # Send details for each active tournament under this account
+        for tournament in challonge.tournaments.index():
+            count += 1
+            output = "" # String to send
+            # Start the message
+            output += "\n**Tournament Details** for **{}**:\n ```".format(tournament["name"])
+            # Append each property in the tournament
+            for prop in tournament:
+                output += "{}: {}\n".format(prop, tournament[prop])
+            # Tie up the message
+            output += "```"
+            # Send all tournament details from Challonge response
+            await client.send_message(message.channel, output)
+
+    # Command: Die
     if command == "DIE":
         quit()
 
