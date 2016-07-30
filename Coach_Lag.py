@@ -1,13 +1,20 @@
 # modules
 import asyncio
+import json
+import os
 
 # third-party modules
 import discord
 import challonge
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
 
 # config
 import config
 
+DIRECTORY = os.path.dirname(os.path.abspath(__file__)) # relative directory
+GOOGLE_API = DIRECTORY + config.G_API
+GSHEET_URL = config.GSHEET_URL
 BOT_CMD_SYMBOL = config.BOT_CMD_SYMBOL
 client = discord.Client()
 roles = []
@@ -120,6 +127,29 @@ async def on_message(message):
             output += "```"
             # Send all tournament details from Challonge response
             await client.send_message(message.channel, output)
+
+    # Command: Running tests on google spreadsheet integration for team and user database
+    # currently running tests off sheet - https://docs.google.com/spreadsheets/d/14f_bEIFMrpuE2euix-r1IC2zA-_u0tQKGnRarbihZvA/edit?usp=sharing
+    if command == "TSTSHEET":
+        scope = ['https://spreadsheets.google.com/feeds']
+        credentials = ServiceAccountCredentials.from_json_keyfile_name(GOOGLE_API, scope)
+        gc = gspread.authorize(credentials)
+        print(GSHEET_URL)
+        sheet = gc.open_by_url(GSHEET_URL)
+        worksheet = sheet.get_worksheet(0)
+        if arguments[0] == "TEAMS":
+            teams_output = ''
+            teams = worksheet.col_values(1)
+            for name in teams:
+                if len(name) > 1:
+                    if name in teams_output or name == worksheet.acell('A1').value:
+                        print(name)
+                        pass
+                    else:
+                        teams_output += "{}\n".format(name)
+            await client.send_message(message.channel, teams_output)
+        else:
+            await client.send_message('Could not work with argument {}'.format(arguments[0]))
 
     # Command: Die
     if command == "DIE":
