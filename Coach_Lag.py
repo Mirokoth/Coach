@@ -18,6 +18,7 @@ GSHEET_URL = config.GSHEET_URL
 BOT_CMD_SYMBOL = config.BOT_CMD_SYMBOL
 client = discord.Client()
 roles = []
+server_lst = []
 
 # Challonge Credentials
 challonge.set_credentials(config.CHAL_USER, config.CHAL_API)
@@ -80,12 +81,14 @@ async def on_ready():
     # Cache server roles
     print('Roles')
     print('------')
-    for role in server.roles:
-        roles.append(role)
-        print(role.name + ' (' + role.id + ')')
+    for server in client.servers:
+        server_lst.append(server)
     print('------')
     print('Get this guy a jockstrap and a cookie!')
     print('------')
+
+
+
 
 # Message Received
 @client.event
@@ -127,6 +130,22 @@ async def on_message(message):
             output += "```"
             # Send all tournament details from Challonge response
             await client.send_message(message.channel, output)
+
+
+    if command == "MATCHES": # Gets match details for provided Tournament
+        if arguments[1] == "WINNER": # If second argument given is winner provide only match win details
+            for match in challonge.matches.index(arguments[0]):
+                if "NONE" not in str(match['winner-id']).upper():
+                    participant = challonge.participants.show(arguments[0], match['winner-id'])
+                    #await client.send_message(message.channel, 'Round {} winner: {}'.format(match['round'],participant['name']))
+                    await client.send_message(server_lst[0], 'Round {} winner: {}'.format(match['round'],participant['name'])) # Outputs to servers default channel
+        else:
+            for match in challonge.matches.index(arguments[0]):
+                output = ""  # String to send
+                for details in match:
+                    output += "{}\n".format(details)
+                await client.send_message(message.channel, "**{}**\n{}".format(match,output))
+
 
     # Command: Running tests on google spreadsheet integration for team and user database
     # currently running tests off sheet - https://docs.google.com/spreadsheets/d/14f_bEIFMrpuE2euix-r1IC2zA-_u0tQKGnRarbihZvA/edit?usp=sharing
