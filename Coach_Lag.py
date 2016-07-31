@@ -14,6 +14,27 @@ import config
 from config import config
 
 DIRECTORY = os.path.dirname(os.path.abspath(__file__)) # relative directory
+DIR_CONF_TOURNY = DIRECTORY + '/config/tournaments.json'
+
+# New installation
+if os.path.exists(DIR_CONF_TOURNY) == False:
+    # Enter setup mode
+    setupMode = True
+
+# Existing installation
+else:
+    setupMode = False
+    # Grab tournament configuration
+    tournaments = json.load(open(DIR_CONF_TOURNY))
+
+# Fill tournament details with dummy data
+# NOTE: To replace this with a setup mode for configuration via Discord
+if setupMode == True:
+    tournaments = ['Test_Tourno'] # Assign dev dummy data
+    # data = 'arbitrary'
+    # with open(DIR_CONF_TOURNY, 'w') as outfile:
+    #     json.dump(data, outfile)
+
 GOOGLE_API = DIRECTORY + config.G_API
 GSHEET_URL = config.GSHEET_URL
 BOT_CMD_SYMBOL = config.BOT_CMD_SYMBOL
@@ -24,7 +45,7 @@ server_lst = []
 # Challonge Credentials
 challonge.set_credentials(config.CHAL_USER, config.CHAL_API)
 # Retrieve a tournament by its id (or its url).
-tournament = challonge.tournaments.show('Test_Tourno')
+tournament = challonge.tournaments.show(tournaments[0])
 # Log the number of tournaments found
 print("{} tournaments found under this account.".format(len(challonge.tournaments.index())))
 
