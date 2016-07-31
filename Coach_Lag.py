@@ -7,7 +7,6 @@ import os
 import discord
 import challonge
 import gspread
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from oauth2client.service_account import ServiceAccountCredentials
 
 # config
