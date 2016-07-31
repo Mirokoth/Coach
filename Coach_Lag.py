@@ -11,6 +11,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 
 # config
 import config
+from config import config
 
 DIRECTORY = os.path.dirname(os.path.abspath(__file__)) # relative directory
 GOOGLE_API = DIRECTORY + config.G_API
