@@ -7,6 +7,7 @@ import os
 import discord
 import challonge
 import gspread
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from oauth2client.service_account import ServiceAccountCredentials
 
 # config
@@ -19,6 +20,7 @@ BOT_CMD_SYMBOL = config.BOT_CMD_SYMBOL
 client = discord.Client()
 roles = []
 server_lst = []
+sched = AsyncIOScheduler()
 
 # Challonge Credentials
 challonge.set_credentials(config.CHAL_USER, config.CHAL_API)
@@ -34,6 +36,7 @@ print(tournament["started-at"]) # None
 # --------------
 # Helper Methods
 # --------------
+
 
 # Check if message is a command
 def isCmd(message):
@@ -65,6 +68,9 @@ def getArgs(message):
         return False
     return arguments
 
+
+
+
 # --------------
 # Discord Events
 # --------------
@@ -76,11 +82,7 @@ async def on_ready():
     print('------')
     for server in client.servers:
         print('{} ({})'.format(server.name, server.id))
-        print('------')
-
-    # Cache server roles
-    print('Roles')
-    print('------')
+    # Cache server list
     for server in client.servers:
         server_lst.append(server)
     print('------')
@@ -133,18 +135,24 @@ async def on_message(message):
 
 
     if command == "MATCHES": # Gets match details for provided Tournament
-        if arguments[1] == "WINNER": # If second argument given is winner provide only match win details
-            for match in challonge.matches.index(arguments[0]):
-                if "NONE" not in str(match['winner-id']).upper():
-                    participant = challonge.participants.show(arguments[0], match['winner-id'])
-                    #await client.send_message(message.channel, 'Round {} winner: {}'.format(match['round'],participant['name']))
-                    await client.send_message(server_lst[0], 'Round {} winner: {}'.format(match['round'],participant['name'])) # Outputs to servers default channel
-        else:
+        try:
+            if arguments[1].upper() == "WINNER": # If second argument given is winner provide only match win details
+                argument_count = 0 # Count how many matches have been won so far
+                for match in challonge.matches.index(arguments[0]):
+                    if "NONE" not in str(match['winner-id']).upper():
+                        argument_count =+ 1
+                        participant = challonge.participants.show(arguments[0], match['winner-id'])
+                        #await client.send_message(message.channel, 'Round {} winner: {}'.format(match['round'],participant['name']))
+                        await client.send_message(server_lst[0], 'Round {} winner: {}'.format(match['round'],participant['name'])) # Outputs to servers default channel
+                # If no matches won yet, return information
+                if argument_count <= 0:
+                    await client.send_message(server_lst[0], 'No matches have been won yet.')
+        except IndexError:
             for match in challonge.matches.index(arguments[0]):
                 output = ""  # String to send
                 for details in match:
-                    output += "{}\n".format(details)
-                await client.send_message(message.channel, "**{}**\n{}".format(match,output))
+                    output += "{}: {}\n".format(details,match[details])
+                await client.send_message(message.channel, "```{}```".format(output))
 
 
     # Command: Running tests on google spreadsheet integration for team and user database
