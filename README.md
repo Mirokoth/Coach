@@ -36,6 +36,7 @@ _Coming soon!_
 - [ ] Configurable access control for GM's
 - [ ] Create requirements.txt
 - [ ] Implement setup mode
+- [ ] PUG group handling
 
 ## Suggestions / Feedback
 Flick us a pull request, open an issue, or drop us a line! - @Mirokoth / @kostakazias
