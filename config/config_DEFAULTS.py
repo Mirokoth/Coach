@@ -1,11 +1,12 @@
 # config-defaults
 # note: rename this file to 'config.py' to override
 
-BOT_TOKEN = "ENTER DISCORD BOT API" # Discord API token
-BOT_CMD_SYMBOL = "SELECT SYMBOL BOT USES FOR COMMANDS" # Symbol prefix required for bot commands
-PYTHON_CMD = "DEFAULT PYTHON VERIABLE" # Python command depending on environment (python/python2/python3)
-COMMAND_LOG = "OUTPUT FOR LOGS" # Log file
-CHAL_USER = "CHALLONGE USERNAME" # Challonge username
-CHAL_API = "CHALLONG API KEY" # Challonge API
-G_API = 'API FILE NAME'# API .JSON file for Google
-GSHEET_URL = "URL" # URL for the Google Docs spreedsheet
+BOT_TOKEN = "<insert>" # Discord API token
+CHAL_USER = "<insert>" # Challonge username
+CHAL_API = "<insert>" # Challonge API token
+G_API = "<insert>" # Google's authentication credentials file name
+GSHEET_URL = "<insert>" # URL for the Google Docs spreedsheet
+
+BOT_CMD_SYMBOL = "!" # Symbol prefix used to trigger bot commands
+PYTHON_CMD = "python" # Python environment variable (usually python/python3)
+COMMAND_LOG = "log.txt" # Log file name
