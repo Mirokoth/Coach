@@ -34,6 +34,7 @@ _Coming soon!_
 - [ ] Print current bracket information
 - [ ] Submit win/loss for a round
 - [ ] Configurable access control for GM's
+- [ ] Create requirements.txt
 - [ ] Implement setup mode
 
 ## Suggestions / Feedback
