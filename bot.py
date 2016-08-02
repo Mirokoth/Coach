@@ -9,6 +9,9 @@ import challonge
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
+# bot modules
+from modules.input import input
+
 # config
 import config
 from config import config
@@ -54,44 +57,6 @@ print(tournament["name"]) # My Awesome Tournament
 print(tournament["started-at"]) # None
 
 # --------------
-# Helper Methods
-# --------------
-
-
-# Check if message is a command
-def isCmd(message):
-    if len(message) > 0 and message[0] == BOT_CMD_SYMBOL:
-        return True
-    return False
-
-# Clean input
-def sanitiseCmd(message):
-    # Remove white space sequences
-    message = ' '.join(message.split())
-    # Grab words
-    words = message.split(' ')
-    return words
-
-# Get command
-def getCmd(message):
-    words = sanitiseCmd(message)
-    # Extract command
-    command = words[0][1:].upper()
-    return command
-
-# Get arguments
-def getArgs(message):
-    words = sanitiseCmd(message)
-    # Extract arguments
-    arguments = words[1:]
-    if len(arguments) == 0:
-        return False
-    return arguments
-
-
-
-
-# --------------
 # Discord Events
 # --------------
 
@@ -109,18 +74,15 @@ async def on_ready():
     print('Get this guy a jockstrap and a cookie!')
     print('------')
 
-
-
-
 # Message Received
 @client.event
 async def on_message(message):
 
     # Check if message is a command
-    if isCmd(message.content):
+    if input.isCmd(message.content):
         # Log command to console
-        command = getCmd(message.content)
-        arguments = getArgs(message.content)
+        command = input.getCmd(message.content)
+        arguments = input.getArgs(message.content)
         print("{} ({}) used the following command: {}".format(message.author.name, message.author.id, command))
         # Send message of to be logged
         # command_log(message.author.name, message.author.id, message.content)
