@@ -1,16 +1,17 @@
 from coach import coach
+import os
+import discord
+import config
+import asyncio
 
 # --- CONFIG ---
 
 DIRECTORY = os.path.dirname(os.path.abspath(__file__)) # relative directory
-GOOGLE_API = DIRECTORY + config.G_API
-GSHEET_URL = config.GSHEET_URL
-BOT_CMD_SYMBOL = config.BOT_CMD_SYMBOL
 client = discord.Client()
 roles = []
 server_lst = []
 client = coach()
-
+BOT_TOKEN = config.BOT_TOKEN
 # --- RUN BOT ---
 
-client.run(config.BOT_TOKEN)
+coach.run(BOT_TOKEN)

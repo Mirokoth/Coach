@@ -20,6 +20,7 @@ BOT_CMD_SYMBOL = config.BOT_CMD_SYMBOL
 client = discord.Client()
 roles = []
 server_lst = []
+BOT_TOKEN = config.BOT_TOKEN
 
 # Challonge Credentials
 challonge.set_credentials(config.CHAL_USER, config.CHAL_API)
@@ -35,7 +36,8 @@ print(tournament["started-at"]) # None
 # --------------
 # Discord Events
 # --------------
-class coach(discord.Client):
+
+class coach():
     # Bot Ready
     @client.event
     async def on_ready():
@@ -49,12 +51,22 @@ class coach(discord.Client):
         print('------')
         print('Get this guy a jockstrap and a cookie!')
         print('------')
+        print('BOT User ID: {}'.format(client.user.id))
 
     # Message Received
     @client.event
-
     async def on_message(message):
-        asyncio.ensure_future(proc_message.the_message(message))
+        isCmd = False
+        if message.author.id == client.user.id:
+            print("Bot is sending it self commands...")
+            pass
+        elif len(message.content) > 0 and message.content[0] == BOT_CMD_SYMBOL:
+            print("Running a command")
+            isCmd = True
+            asyncio.ensure_future(proc_message.the_message(message, isCmd))
 
-    async def send_message(self, *args, **kwargs):
-        return await super().send_message(*args, **kwargs)
+    async def forward_message(*args, **kwargs):
+        print("forward_message")
+        return await client.send_message(*args, **kwargs)
+
+client.run(BOT_TOKEN)
