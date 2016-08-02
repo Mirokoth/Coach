@@ -1,5 +1,5 @@
 # Coach
-Extdernal message handling via json file is currently working (on my pc at least).
+External message handling via json file is currently working (on my pc at least).
 
 bot.py - launches app
 coach.py - intercepts and sends messages.
