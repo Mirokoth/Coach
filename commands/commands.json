@@ -1,0 +1,8 @@
+{
+  "help": "commands.help",
+  "error": "commands.error",
+  "die": "commands.quit",
+  "quit": "commands.quit",
+  "meta": "commands.meta",
+  "tstsheet": "commands.tstsheet"  
+}
