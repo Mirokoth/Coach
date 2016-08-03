@@ -4,5 +4,7 @@
   "die": "commands.quit",
   "quit": "commands.quit",
   "meta": "commands.meta",
-  "tstsheet": "commands.tstsheet"  
+  "tstsheet": "commands.tstsheet",
+  "details": "commands.details",
+  "create": "commands.create"
 }
