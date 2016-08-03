@@ -57,16 +57,14 @@ class coach():
     @client.event
     async def on_message(message):
         isCmd = False
-        if message.author.id == client.user.id:
-            print("Bot is sending it self commands...")
+        if message.author.id == client.user.id: # If message author is bot ignore the message
             pass
-        elif len(message.content) > 0 and message.content[0] == BOT_CMD_SYMBOL:
-            print("Running a command")
+        elif len(message.content) > 0 and message.content[0] == BOT_CMD_SYMBOL: # Check if command
             isCmd = True
-            asyncio.ensure_future(proc_message.the_message(message, isCmd))
+            asyncio.ensure_future(proc_message.the_message(message, isCmd)) # Send command to proc_message for processing
 
-    async def forward_message(*args, **kwargs):
-        print("forward_message")
+    async def forward_message(*args, **kwargs): # Forwards received arguments to chat
         return await client.send_message(*args, **kwargs)
+
 
 client.run(BOT_TOKEN)

@@ -1,4 +1,6 @@
 {
   "help": "commands.help",
-  "error": "commands.error"
+  "error": "commands.error",
+  "die": "commands.quit",
+  "quit": "commands.quit"
 }

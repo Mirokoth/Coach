@@ -12,6 +12,7 @@ roles = []
 server_lst = []
 client = coach()
 BOT_TOKEN = config.BOT_TOKEN
+
 # --- RUN BOT ---
 
 coach.run(BOT_TOKEN)
