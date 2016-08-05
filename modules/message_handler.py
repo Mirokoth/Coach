@@ -44,12 +44,12 @@ class message_handler():
 		self.coach = coach
 		# Get command list
 		commands = get_commands()
-		self.plugin_instance = {} # Empty dictionary for caching plugins
+		self.plugin_instances = {} # Empty dictionary for caching plugins
 		# Dynamically load modules based on command list
 		for command in commands:
 			plugin = import_module(commands[command]) # load module
 			plugin = getattr(plugin, command) # load class
-			self.plugin_instance[command] = plugin(self, self.coach) # instantiate the class
+			self.plugin_instances[command] = plugin(self, self.coach) # instantiate the class
 
 	# Message received
 	async def the_message(self, message):
@@ -64,54 +64,12 @@ class message_handler():
 		else:
 			return
 
-		# TODO: Loop over modules and instantiate
-
-		# Temporary catch
-		if command.upper() == "GET":
-			print('Gotten..')
-			commands = get_commands()
-			for command in commands:
-				print(command)
-			# print(self.message)
-			# print(self.coach)
-			# await self.coach.forward_message(message.channel, "Commands: {}".format(commands))
-			return
-
-		# Temporary catch
-		if command.upper() == "HELP":
-			print("Func: new help")
-			# plugin_instance = Help(self, self.coach) # help module
-			await self.plugin_instance['Help'].on_message(message, command, arguments)
-
-		# Temporary catch
-		if command.upper() == "DETAILS":
-			print("Func: new details")
-			# plugin_instance = Help(self, self.coach) # help module
-			await self.plugin_instance['Details'].on_message(message, command, arguments)
-
-		# Previous catch loop
-		# found_command = False # Temp variable
-		# for separate_command in CMDS:
-		# 	if command == str(separate_command).upper(): # If the command given matches a command in the dictionary
-		# 		found_command = True
-		# 		script = import_module(str(CMDS[separate_command])) # Import module referenced by command in dictionary
-		# 		await script.message(message, command, arguments) # Send message to module
-		# 	if found_command == True: # if a matching command was found, break the for loop
-		# 		break
-		# if found_command == False: # if no command was found return error
-		# 	script = import_module('commands.error')
-		# 	await script.message(message, command, arguments)
-
-		# import_module(str(list[command]))
-        # storage = await self.get_storage(server)
-        # commands = sorted(await storage.smembers('commands'))
-        # cmds = []
-        # for command in commands:
-        #     cmd = {
-        #         'name': command
-        #     }
-        #     cmds.append(cmd)
-        # return cmds
+		# Check against command list
+		for plugin in self.plugin_instances:
+			if command.title() == plugin:
+				await self.plugin_instances[command.title()].on_message(message, command, arguments)
+		else:
+			print("That ain't a command! Type {}help for more information.".format(BOT_CMD_SYMBOL))
 
 	# async def get_commands():
 	# 	CMDS = json.load(open(os.path.dirname(DIRECTORY) + '\\commands\\commands.json'))

@@ -7,7 +7,6 @@
 import asyncio
 import json
 import os
-from coach import coach
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
@@ -17,8 +16,13 @@ DIRECTORY = os.path.dirname(os.path.abspath(__file__)) # relative directory
 GOOGLE_API = DIRECTORY + config.G_API
 GSHEET_URL = config.GSHEET_URL
 
-class message():
-    async def __new__(self, message, command, arguments):
+class Tstsheet():
+    def __init__(self, message_handler, coach):
+        self.message_handler = message_handler
+        self.coach = coach
+
+    # Command received
+    async def on_message(self, message, command, arguments):
         scope = ['https://spreadsheets.google.com/feeds']
         credentials = ServiceAccountCredentials.from_json_keyfile_name(GOOGLE_API, scope)
         gc = gspread.authorize(credentials)
@@ -26,7 +30,7 @@ class message():
         sheet = gc.open_by_url(GSHEET_URL)
         worksheet = sheet.get_worksheet(0)
         if arguments == False:
-            await coach.forward_message(message.channel, "No command switches provided")
+            await self.coach.forward_message(message.channel, "No command switches provided")
         if len(arguments) == 1:
             if arguments[0].upper() == "TEAMS":
                 teams_output = ''
@@ -38,6 +42,6 @@ class message():
                             pass
                         else:
                             teams_output += "{}\n".format(name)
-                await coach.forward_message(message.channel, teams_output)
+                await self.coach.forward_message(message.channel, teams_output)
             else:
-                await coach.forward_message(message.channel, 'Could not work with argument **{}**'.format(arguments[0]))
+                await self.coach.forward_message(message.channel, 'Could not work with argument **{}**'.format(arguments[0]))

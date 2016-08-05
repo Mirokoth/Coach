@@ -1,4 +1,9 @@
 {
   "Help": "commands.help",
-  "Details": "commands.details"
+  "Details": "commands.details",
+  "Meta": "commands.meta",
+  "Tstsheet": "commands.tstsheet",
+  "Create": "commands.create",
+  "Help": "commands.help",
+  "Quit": "commands.quit"
 }
