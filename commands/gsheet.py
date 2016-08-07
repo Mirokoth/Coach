@@ -16,7 +16,7 @@ DIRECTORY = os.path.dirname(os.path.abspath(__file__)) # relative directory
 GOOGLE_API = DIRECTORY + config.G_API
 GSHEET_URL = config.GSHEET_URL
 
-class Tstsheet():
+class Gsheet():
     def __init__(self, message_handler, coach):
         self.message_handler = message_handler
         self.coach = coach
