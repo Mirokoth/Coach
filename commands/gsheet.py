@@ -30,7 +30,7 @@ class Gsheet():
         worksheet = sheet.get_worksheet(0)
         if arguments == False:
             await self.coach.forward_message(message.channel, "No command switches provided.")
-        if len(arguments) == 1:
+        elif len(arguments) == 1:
             if arguments[0].upper() == "TEAMS":
                 teams_output = ''
                 teams = worksheet.col_values(1)
