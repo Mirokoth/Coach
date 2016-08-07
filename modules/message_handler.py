@@ -32,13 +32,29 @@ print(tournament["id"]) # 3272
 print(tournament["name"]) # My Awesome Tournament
 print(tournament["started-at"]) # None
 
+# Get command list from file (add/remove commands from there do enable/disable them)
+def get_commands():
+	commands = json.load(open(os.path.dirname(DIRECTORY) + '\\commands\\commands.json'))
+	return commands
+
 class message_handler():
 
 	# Set message to message
-	def __init__(self, message):
-		self.message = message
+	def __init__(self, coach):
+		self.coach = coach
+		# Get command list
+		commands = get_commands()
+		self.plugin_instances = {} # Empty dictionary for caching plugins
+		# Dynamically load modules based on command list
+		for command in commands:
+			plugin = import_module(commands[command]) # load module
+			plugin = getattr(plugin, command) # load class
+			self.plugin_instances[command] = plugin(self, self.coach) # instantiate the class
 
-	async def the_message(message):
+	# Message received
+	async def the_message(self, message):
+		print('message_handler received message:')
+		print(message)
 		CMDS = json.load(open(os.path.dirname(DIRECTORY) + '\\commands\\commands.json')) # Load list of commands and .py locations
 		if input.isCmd(message.content):
 			# Log command to console
@@ -48,14 +64,18 @@ class message_handler():
 		else:
 			return
 
-		found_command = False # Temp variable
-		for separate_command in CMDS: # For each command in the command dictionary
-			if command == str(separate_command).upper(): # If the command given matches a command in the dictionary
-				found_command = True
-				script = import_module(str(CMDS[separate_command])) # Import module referenced by command in dictionary
-				await script.message(message, command, arguments) # Send message to module
-			if found_command == True: # if a matching command was found, break the for loop
-				break
-		if found_command == False: # if no command was found return error
-			script = import_module('commands.error')
-			await script.message(message, command, arguments)
+		# Match against command list
+		for plugin in self.plugin_instances:
+			if command.title() == plugin:
+				# Send command to module
+				await self.plugin_instances[command.title()].on_message(message, command, arguments)
+		# Command not found
+		else:
+			print("That ain't a command! Type {}help for more information.".format(BOT_CMD_SYMBOL))
+
+	# async def get_commands():
+	# 	CMDS = json.load(open(os.path.dirname(DIRECTORY) + '\\commands\\commands.json'))
+	# 	# For each command in the command dictionary
+	# 	for separate_command in CMDS:
+	# 		script = import_module(str(CMDS[separate_command]))
+	# 		await script.get_description() # Send message to module

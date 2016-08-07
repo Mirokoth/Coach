@@ -1,28 +1,26 @@
-### ------------------------------------------------
-###  All of the below infomation should remain
-###  You can add any modules or code required
-###m  message.channel and the string to send can be changed.
-### ------------------------------------------------
-
 import asyncio
-from coach import coach
 
 pending = []
 
 # Command: Create a tournament
 # TODO: Implement a check to confirm creation
 # TODO: Allow additional parameters and feedback
-class message():
-    async def __new__(self, message, command, arguments):
+class Create():
+    def __init__(self, message_handler, coach):
+        self.message_handler = message_handler
+        self.coach = coach
+
+    # Command received
+    async def on_message(self, message, command, arguments):
         # No arguments
         if arguments == False:
-            await coach.forward_message(message.channel, "Gimme arguments brah.")
+            await self.coach.forward_message(message.channel, "Gimme arguments brah.")
         # Arguments
         else:
             name = arguments[0]
             url = arguments[0]
             pending.append({'userId': message.author.id, 'type': 'create', 'action': [name, url]})
-            await coach.forward_message(message.channel, "Are you sure you want to create a tournament called {}? Enter **y** or **n**.".format(name))
+            await self.coach.forward_message(message.channel, "Are you sure you want to create a tournament called {}? Enter **y** or **n**.".format(name))
             for job in pending:
                 print(job['userId'])
                 print(job['type'])
@@ -38,22 +36,22 @@ class message():
 #                 print(job['action'])
 #                 try:
 #                     await challonge.tournaments.create(job['action'][0], job['action'][1])
-#                     await client.send_message(message.channel, "I think it worked")
+#                     await client.forward_message(message.channel, "I think it worked")
 #                     break
 #                 except:
-#                     await client.send_message(message.channel, "'El problemo bromego.")
+#                     await client.forward_message(message.channel, "'El problemo bromego.")
 #     return
 # # Decline command confirmation
 # elif message.content.upper() == "N":
 #     for job in pending:
 #         if job['userId'] == message.author.id:
-#             await client.send_message(message.channel, "Cancelling your fucking request.")
+#             await client.forward_message(message.channel, "Cancelling your fucking request.")
 #             # Create tournament
 #             # if job['type'] == 'create':
 #             #     print(job['action'])
 #             #     try:
 #             #         await challonge.tournaments.create(job['action'][0], job['action'][1])
-#             #         await client.send_message(message.channel, "I think it worked")
+#             #         await client.forward_message(message.channel, "I think it worked")
 #             #     except:
-#             #         await client.send_message(message.channel, "'El problemo bromego.")
+#             #         await client.forward_message(message.channel, "'El problemo bromego.")
 #     return

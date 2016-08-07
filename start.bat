@@ -1,0 +1,2 @@
+bot.py
+cmd /k

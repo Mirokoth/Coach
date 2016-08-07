@@ -1,10 +1,8 @@
 {
-  "help": "commands.help",
-  "error": "commands.error",
-  "die": "commands.quit",
-  "quit": "commands.quit",
-  "meta": "commands.meta",
-  "tstsheet": "commands.tstsheet",
-  "details": "commands.details",
-  "create": "commands.create"
+  "Create": "commands.create",
+  "Details": "commands.details",
+  "Gsheet": "commands.gsheet",
+  "Help": "commands.help",
+  "Meta": "commands.meta",
+  "Quit": "commands.quit"
 }
