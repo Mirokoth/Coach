@@ -8,7 +8,6 @@ class Quit():
 
     # Command received
     async def on_message(self, message, command, arguments):
-        random = import_module('commands.quote')
-        #print(random.message.message())
-        await self.coach.forward_message(message.channel, '{}'.format(random.message.message()))
+        quote = import_module('modules.quote')
+        await self.coach.forward_message(message.channel, '{}'.format(quote.getQuote()))
         quit()

@@ -1,9 +1,8 @@
 {
-  "Help": "commands.help",
-  "Details": "commands.details",
-  "Meta": "commands.meta",
-  "Tstsheet": "commands.tstsheet",
   "Create": "commands.create",
+  "Details": "commands.details",
   "Help": "commands.help",
-  "Quit": "commands.quit"
+  "Meta": "commands.meta",
+  "Quit": "commands.quit",
+  "Tstsheet": "commands.tstsheet"
 }
