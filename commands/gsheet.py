@@ -12,7 +12,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 
 from config import config
 
-DIRECTORY = os.path.dirname(os.path.abspath(__file__)) # relative directory
+DIRECTORY = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..") # relative directory
 GOOGLE_API = DIRECTORY + config.G_API
 GSHEET_URL = config.GSHEET_URL
 
@@ -26,11 +26,10 @@ class Gsheet():
         scope = ['https://spreadsheets.google.com/feeds']
         credentials = ServiceAccountCredentials.from_json_keyfile_name(GOOGLE_API, scope)
         gc = gspread.authorize(credentials)
-        print(GSHEET_URL)
         sheet = gc.open_by_url(GSHEET_URL)
         worksheet = sheet.get_worksheet(0)
         if arguments == False:
-            await self.coach.forward_message(message.channel, "No command switches provided")
+            await self.coach.forward_message(message.channel, "No command switches provided.")
         if len(arguments) == 1:
             if arguments[0].upper() == "TEAMS":
                 teams_output = ''
