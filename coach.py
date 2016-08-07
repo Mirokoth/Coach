@@ -37,7 +37,6 @@ class Coach(discord.Client):
 
     # Message Received
     async def on_message(self, message):
-        print('coach.on_message')
         if message.author.id != self.user.id:
             # Send command to message_handler for processing
             # asyncio.ensure_future(self.message_handler.the_message(message))

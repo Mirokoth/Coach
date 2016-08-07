@@ -64,10 +64,12 @@ class message_handler():
 		else:
 			return
 
-		# Check against command list
+		# Match against command list
 		for plugin in self.plugin_instances:
 			if command.title() == plugin:
+				# Send command to module
 				await self.plugin_instances[command.title()].on_message(message, command, arguments)
+		# Command not found
 		else:
 			print("That ain't a command! Type {}help for more information.".format(BOT_CMD_SYMBOL))
 
