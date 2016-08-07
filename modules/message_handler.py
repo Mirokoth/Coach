@@ -39,6 +39,8 @@ def get_commands():
 
 class message_handler():
 
+	allMessageQueue = []
+
 	# Set message to message
 	def __init__(self, coach):
 		self.coach = coach
@@ -70,6 +72,9 @@ class message_handler():
 		# Command not found
 		else:
 			print("That ain't a command! Type {}help for more information.".format(BOT_CMD_SYMBOL))
+	async def addToAllMessageQueue(self, user, channel):
+		allMessageQueue.append({ user: user, channel: channel })
+		print(AllMessageQueue)
 
 	# async def get_commands():
 	# 	CMDS = json.load(open(os.path.dirname(DIRECTORY) + '\\commands\\commands.json'))

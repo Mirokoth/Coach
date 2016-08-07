@@ -4,5 +4,6 @@
   "Gsheet": "commands.gsheet",
   "Help": "commands.help",
   "Meta": "commands.meta",
-  "Quit": "commands.quit"
+  "Quit": "commands.quit",
+  "Start": "commands.start"
 }
