@@ -5,6 +5,13 @@ class Details():
     def __init__(self, message_handler, coach):
         self.message_handler = message_handler
         self.coach = coach
+
+    # Command description
+    def get_description(self):
+        description = "GET CHO DEETS BRING BRING GET YOOOO DEETS"
+        return description
+
+    # Process command
     async def on_message(self, message, command, arguments):
         # Command: Send full responses for active tournaments associated to an account
         count = 0

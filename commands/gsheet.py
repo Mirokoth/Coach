@@ -15,7 +15,12 @@ class Gsheet():
         self.message_handler = message_handler
         self.coach = coach
 
-    # Command received
+    # Command description
+    def get_description(self):
+        description = "gangster sheets bruh"
+        return description
+
+    # Process command
     async def on_message(self, message, command, arguments):
         scope = ['https://spreadsheets.google.com/feeds']
         credentials = ServiceAccountCredentials.from_json_keyfile_name(GOOGLE_API, scope)

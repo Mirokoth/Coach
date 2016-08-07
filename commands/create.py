@@ -10,7 +10,12 @@ class Create():
         self.message_handler = message_handler
         self.coach = coach
 
-    # Command received
+    # Command description
+    def get_description(self):
+        description = "The meaning of life"
+        return description
+
+    # Process command
     async def on_message(self, message, command, arguments):
         # No arguments
         if arguments == False:

@@ -53,8 +53,6 @@ class message_handler():
 
 	# Message received
 	async def the_message(self, message):
-		print('message_handler received message:')
-		print(message)
 		CMDS = json.load(open(os.path.dirname(DIRECTORY) + '\\commands\\commands.json')) # Load list of commands and .py locations
 		if input.isCmd(message.content):
 			# Log command to console
