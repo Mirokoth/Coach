@@ -4,6 +4,7 @@
 BOT_TOKEN = "<insert>" # Discord API token
 CHAL_USER = "<insert>" # Challonge username
 CHAL_API = "<insert>" # Challonge API token
+CHAL_POLL_FREQUENCY = 30 # Frequency in seconds to poll Challonge tournaments for changes (default: 30, number in seconds)
 G_API = "<insert>" # Google's authentication credentials file name
 GSHEET_URL = "<insert>" # URL for the Google Docs spreedsheet
 
