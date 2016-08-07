@@ -21,7 +21,7 @@ class Meta():
     # Process command
     async def on_message(self, message, command, arguments):
         if arguments == False:
-            await self.coach.forward_message(message.channel, "Please add the ID of the tournament you wish to see. ie. If the URL is **http://challonge.com/test** then type **'{}{} test**'".format(BOT_CMD_SYMBOL, command.lower()))
+            await self.coach.forward_message(message.channel, "Please add the ID of the tournament you wish to see. ie. If the URL is **http://challonge.com/test** then type **'{}{} test**'".format(config.BOT_CMD_SYMBOL, command.lower()))
         else:
             tournament = challonge.tournaments.show(arguments[0])
             await self.coach.forward_message(message.channel, "***Tournament details:***```ID: {}\nName: {}\nStarted at: {}\nState: {}```".format(tournament["id"],tournament["name"],tournament["started-at"],tournament["state"]))
