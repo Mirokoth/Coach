@@ -3,12 +3,13 @@ from importlib import import_module
 
 class Quit():
     def __init__(self, message_handler, coach):
+        self.command = "quit"
         self.message_handler = message_handler
         self.coach = coach
 
     # Command description
     def get_description(self):
-        description = "Wai wurri"
+        description = "Quit and sometimes restart"
         return description
 
     # Process command

@@ -1,4 +1,5 @@
 import asyncio
+from config import config
 
 pending = []
 
@@ -7,12 +8,13 @@ pending = []
 # TODO: Allow additional parameters and feedback
 class Create():
     def __init__(self, message_handler, coach):
+        self.command = "create"
         self.message_handler = message_handler
         self.coach = coach
 
     # Command description
     def get_description(self):
-        description = "The meaning of life"
+        description = "Create a new tournament with '{}{} <insert name>'.".format(config.BOT_CMD_SYMBOL, self.command)
         return description
 
     # Process command

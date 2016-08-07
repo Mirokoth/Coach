@@ -1,4 +1,5 @@
 import asyncio
+from config import config
 
 class Help():
     def __init__(self, message_handler, coach):
@@ -7,7 +8,7 @@ class Help():
 
     # Command description
     def get_description(self):
-        description = "even more meta than meta"
+        description = "See this menu.. but how can we see this menu without first seeing this menu?"
         return description
 
     # Get all command descriptions
