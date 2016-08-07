@@ -52,7 +52,7 @@ class message_handler():
 			self.plugin_instances[command] = plugin(self, self.coach) # instantiate the class
 
 	# Message received
-	async def the_message(self, message):
+	async def on_message(self, message):
 		CMDS = json.load(open(os.path.dirname(DIRECTORY) + '\\commands\\commands.json')) # Load list of commands and .py locations
 		if input.isCmd(message.content):
 			# Log command to console

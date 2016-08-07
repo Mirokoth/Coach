@@ -39,7 +39,7 @@ class Coach(discord.Client):
     async def on_message(self, message):
         if message.author.id != self.user.id:
             # Send command to message_handler for processing
-            # asyncio.ensure_future(self.message_handler.the_message(message))
+            # asyncio.ensure_future(self.message_handler.on_message(message))
             # loop = asyncio.get_event_loop()
 
             # Instantiate message handler
@@ -47,6 +47,6 @@ class Coach(discord.Client):
             self.message_handler = message_handler(self)
 
             # Pass message to the message handler
-            self.loop.create_task(self.message_handler.the_message(message))
+            self.loop.create_task(self.message_handler.on_message(message))
 
 coach = Coach().run(config.BOT_TOKEN)
