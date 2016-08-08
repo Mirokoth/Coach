@@ -1,8 +1,7 @@
-import time
-# import modules.tournament_diff as tournament_diff
 import asyncio
 import os
 import time
+from datetime import datetime, timedelta
 
 import challonge
 
@@ -12,7 +11,8 @@ from config import config
 # TODO: Override automatically, with config, or with gsheets later
 tournNames = {
     "Test_Tourno": {},
-    "Test_Tourno2": {}
+    "Test_Tourno2": {},
+    "Test_Tourno3": {}
 }
 
 # Grab the latest copy of a tournament's match list and compare it to our previous copy
@@ -47,14 +47,17 @@ def diff(coach, tournName, server_list, matchList):
                         if ('None' not in str(newMatch['player1-id']) and
                             'None' not in str(newMatch['player2-id'])):
 
+
                             tournament = challonge.tournaments.show(newMatch['tournament-id'])
                             player1 = challonge.participants.show(tournament['name'], newMatch['player1-id'])
                             player2 = participant = challonge.participants.show(tournament['name'], newMatch['player2-id'])
+                            # cTime sets the amount of minutes a team has to show up for a match
+                            cTime = datetime.now() + timedelta(minutes=30)
 
-                            newMatchString = ('Match beginning: ```\n{} VS. {}\n\n'
-                            'All players please report to tournament rooms within '
-                            '30 minutes.\nIf there are any issue please seek a LAG'
-                            ' staff member.```'.format(player1['name'], player2['name']))
+                            newMatchString = ('Match beginning: ```\n{} vs. {}\n\n'
+                            'All players please report to tournament rooms by '
+                            '{:%H:%M}.\n\nIf there are any issue please seek a LAG'
+                            ' staff member.```'.format(player1['name'], player2['name'], cTime))
 
                             print('Found match beginning, sending to coach..')
                             coach.loop.create_task(coach.forward_message(coach.server, newMatchString))
@@ -62,20 +65,32 @@ def diff(coach, tournName, server_list, matchList):
                 elif ('None' not in str(newMatch['winner-id']) and
                         newMatch['winner-id'] != match['winner-id']):
 
+                    # Assigns the final score to the player id for winner/loser
+                    # Player1 will be score[0] and Player2 score[1]
+                    score = newMatch['scores-csv'].split('-', 2)
+                    if newMatch['winner-id'] == newMatch['player1-id']:
+                        winScore = score[0]
+                        loseScore = score[1]
+                    else:
+                        winScore = score[1]
+                        loseScore = score[0]
+
                     tournament = challonge.tournaments.show(newMatch['tournament-id'])
                     winner = challonge.participants.show(tournament['name'], newMatch['winner-id'])
                     loser = participant = challonge.participants.show(tournament['name'], newMatch['loser-id'])
                     change = True
-
                     # Logs each win for testing purposes
                     with open(DIRECTORY + '\\win_log\\' + tournament['name'] + " - " +
                                 match['identifier'] + " - " + time.strftime('%H-%M') + ".txt", 'a+') as txt:
                                 txt.write(str(newMatch))
                                 txt.close()
 
-                    matchWinStr = ('Match has been won!\n```Tournament: {}'
-                            '\nWinner : {}\nLoser : {}```'.format(tournament['name'],
-                             winner['name'], loser['name']))
+                    matchWinStr = ('**{}** match has been won:\n```'
+                            '\n{} vs. {}\n\n{} beat {}\n'
+                            'with a final score of {} to {}\n\n'
+                            'Ladder details can be found {}```'.format(tournament['name'],
+                             winner['name'], loser['name'], winner['name'], loser['name'],
+                              winScore, loseScore, tournament['full-challonge-url']))
 
                     print('Found match win, sending to coach..')
                     coach.loop.create_task(coach.forward_message(coach.server, matchWinStr))
