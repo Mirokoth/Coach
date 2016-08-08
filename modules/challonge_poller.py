@@ -67,6 +67,12 @@ def diff(coach, tournName, server_list, matchList):
                     loser = participant = challonge.participants.show(tournament['name'], newMatch['loser-id'])
                     change = True
 
+                    # Logs each win for testing purposes
+                    with open(DIRECTORY + '\\win_log\\' + tournament['name'] + " - " +
+                                match['identifier'] + " - " + time.strftime('%H-%M') + ".txt", 'a+') as txt:
+                                txt.write(str(newMatch))
+                                txt.close()
+
                     matchWinStr = ('Match has been won!\n```Tournament: {}'
                             '\nWinner : {}\nLoser : {}```'.format(tournament['name'],
                              winner['name'], loser['name']))
