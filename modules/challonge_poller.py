@@ -52,7 +52,7 @@ def diff(coach, tournName, server_list, matchList):
                             player1 = challonge.participants.show(tournament['name'], newMatch['player1-id'])
                             player2 = participant = challonge.participants.show(tournament['name'], newMatch['player2-id'])
                             # cTime sets the amount of minutes a team has to show up for a match
-                            cTime = datetime.now() + timedelta(minutes=30)
+                            cTime = datetime.now() + timedelta(minutes=config.FORFEIT_TIMEOUT)
 
                             newMatchString = ('Match beginning: ```\n{} vs. {}\n\n'
                             'All players please report to tournament rooms by '
@@ -67,6 +67,7 @@ def diff(coach, tournName, server_list, matchList):
 
                     # Assigns the final score to the player id for winner/loser
                     # Player1 will be score[0] and Player2 score[1]
+                    # Will not work if Player has a negative score
                     score = newMatch['scores-csv'].split('-', 2)
                     if newMatch['winner-id'] == newMatch['player1-id']:
                         winScore = score[0]
@@ -89,7 +90,7 @@ def diff(coach, tournName, server_list, matchList):
                             '\n{} vs. {}\n\n{} beat {}\n'
                             'with a final score of {} to {}\n\n'
                             'Ladder details can be found {}```'.format(tournament['name'],
-                             winner['name'], loser['name'], winner['name'], loser['name'],
+                             newMatch['player1-id'], newMatch['player2-id'], winner['name'], loser['name'],
                               winScore, loseScore, tournament['full-challonge-url']))
 
                     print('Found match win, sending to coach..')
