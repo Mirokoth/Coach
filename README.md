@@ -27,6 +27,7 @@ _Coming soon!_
 
 ## To do
 - [x] List active tournaments created by your account
+- [x] Background task to monitor specified tournaments
 - [ ] Support tournaments created by your organisation/subdomain
 - [ ] Create new tournaments
 - [ ] Support batch participant updates from a Google Sheet
