@@ -29,7 +29,7 @@ def diff(coach, tournName, server_list, matchList):
     if len(matchList) == 0:
         # Assign match list
         matchList = challonge.matches.index(tournName)
-        print('No local match list to compare to yet, populating..')
+        print('{} - No local match list to compare to yet, populating..'.format(time.strftime('%H:%M:%S')))
         # Skip as we have nothing to compare to
         return matchList
         # matchList = newMatchList
@@ -121,8 +121,8 @@ class Poller():
     async def background_scan(self):
         while not self.coach.is_closed:
             await asyncio.sleep(config.CHAL_POLL_FREQUENCY)
-            print('{} - Performing background task to scan tournaments'.format(time.strftime('%H:%M:%S')))
+            print('{} - Background tasks to scan tournaments - Started'.format(time.strftime('%H:%M:%S')))
             for tournament in tournNames:
-                print('Checking ' + tournament + '..')
+                print('{} - Checking {} ..'.format(time.strftime('%H:%M:%S'), tournament))
                 tournNames[tournament] = diff(self.coach, str(tournament), self.coach.servers, tournNames[tournament])
             print('{} - Background tasks to scan tournaments - Complete'.format(time.strftime('%H:%M:%S')))
