@@ -38,6 +38,7 @@ _Coming soon!_
 - [ ] Create requirements.txt
 - [ ] Implement setup mode
 - [ ] PUG group handling
+- [ ] Console logging + Log file
 
 ## Suggestions / Feedback
 Flick us a pull request, open an issue, or drop us a line! - @Mirokoth / @kostakazias
