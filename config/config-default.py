@@ -9,6 +9,10 @@ FORFEIT_TIMEOUT = 30 # MINUTES a team has until they forfeit a match. This is fr
 G_API = "<insert>" # Google's authentication credentials file name
 GSHEET_URL = "<insert>" # URL for the Google Docs spreedsheet
 
+TWIL_ACCOUNT_SID = "XXXXXXXXXXXXXXXXX" # Twilio.com API Credentials
+TWIL_AUTH_TOKEN = "XXXXXXXXXXXXXXXXX" # Twilio.com API Credentials
+TWIL_NUMBER = "XXXXXXXXX" # Twilio.com Phone number
+
 BOT_CMD_SYMBOL = "!" # Symbol prefix used to trigger bot commands
 PYTHON_CMD = "python" # Python environment variable (usually python/python3)
 COMMAND_LOG = "log.txt" # Log file name
