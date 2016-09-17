@@ -1,4 +1,3 @@
-import asyncio
 import json
 import os
 import gspread
@@ -9,13 +8,13 @@ DIRECTORY = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..") # rel
 GOOGLE_API = DIRECTORY + config.G_API
 GSHEET_URL = config.GSHEET_URL
 
+# Command: Read team information from a spreadsheet
 class Gsheet():
     def __init__(self, message_handler, coach):
         self.command = "gsheet"
         self.message_handler = message_handler
         self.coach = coach
 
-    # Command description
     def get_description(self):
         description = "Play with data in a google sheet using '{}{} teams'".format(config.BOT_CMD_SYMBOL, self.command)
         return description

@@ -1,13 +1,12 @@
-import asyncio
 import challonge
 
+# Command: See all active tournaments and a huge list of all variables
 class Details():
     def __init__(self, message_handler, coach):
         self.command = "details"
         self.message_handler = message_handler
         self.coach = coach
 
-    # Command description
     def get_description(self):
         description = "See all active tournaments."
         return description

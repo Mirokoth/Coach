@@ -1,12 +1,16 @@
-import asyncio
 from config import config
 
+# TODO:
+# ADD FEATURE TO GENERATE HELP DOCUMENTATION FOR ITEMS THAT THE USER ONLY HAS PERMISSION FOR (ADMIN OR NOT)
+# ADD AN ACCESS CONTROL MODULE
+# ALLOW GLOBAL 'SILENT' MODE TO CONFIG FOR COMMANDS THAT ARE ADMINS ONLY, WHICH PMS RESULTS FOR CERTAIN COMMANDS TO THEM DIRECTLY
+
+# Command: Return documentation regarding all available commands
 class Help():
     def __init__(self, message_handler, coach):
         self.message_handler = message_handler
         self.coach = coach
 
-    # Command description
     def get_description(self):
         description = "See this menu.. but how can we see this menu without first seeing this menu?"
         return description
