@@ -4,6 +4,7 @@ import asyncio
 import discord
 # custom modules
 from modules.message_handler import message_handler
+from modules.permissions import AccessController
 # config
 from config import config
 server_list = []

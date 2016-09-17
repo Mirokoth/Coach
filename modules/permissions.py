@@ -17,8 +17,8 @@ class AccessController():
 
         """
         for role in user.roles:
-            for adminRole in config.adminRoleIds:
-                if role.id == adminRole:
+            for adminRoleId in config.ADMIN_ROLE_IDS:
+                if role.id == adminRoleId:
                     return True
         # No match
         return False
