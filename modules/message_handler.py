@@ -53,22 +53,38 @@ class message_handler():
 
 	# Message received
 	async def on_message(self, message):
+		""" Read messages from Discord and process any commands found
+
+		Args:
+			message (obj):	Discord message object
+
+		"""
+
 		CMDS = json.load(open(os.path.dirname(DIRECTORY) + '\\commands\\commands.json')) # Load list of commands and .py locations
+
+		# Command found
 		if input.isCmd(message.content):
 			# Log command to console
 			command = input.getCmd(message.content)
 			arguments = input.getArgs(message.content)
 			print("{} ({}) used the following command: {}".format(message.author.name, message.author.id, command))
+
+		# Command not found
 		else:
 			return
 
+		match = False
 		# Match against command list
 		for plugin in self.plugin_instances:
+
+			# Valid command
 			if command.title() == plugin:
+				match = True
 				# Send command to module
 				await self.plugin_instances[command.title()].on_message(message, command, arguments)
-		# Command not found
-		else:
+
+		# Invalid command
+		if match == False:
 			print("That ain't a command! Type {}help for more information.".format(BOT_CMD_SYMBOL))
 
 	# async def get_commands():
