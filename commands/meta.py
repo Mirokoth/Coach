@@ -1,19 +1,14 @@
-# python modules
-import asyncio
-import os
-
-# third-party modules
 import challonge
-
 from config import config
 
+# Command: Return high level details about a specific tournament
 class Meta():
     def __init__(self, message_handler, coach):
         self.command = "meta"
+        self.adminRequired = False
         self.message_handler = message_handler
         self.coach = coach
 
-    # Command description
     def get_description(self):
         description = "See high-level details about a specific tournament. ie. For  http://challonge.com/testtournament type '{}{} test'".format(config.BOT_CMD_SYMBOL, self.command)
         return description

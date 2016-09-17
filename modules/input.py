@@ -1,5 +1,6 @@
 from config import config
 
+# Handle string input and extract commands
 class input():
 
     # Check if message is a command

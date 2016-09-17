@@ -1,4 +1,5 @@
 {
+  "Admin": "commands.dev.admin",
   "Create": "commands.create",
   "Details": "commands.details",
   "Gsheet": "commands.gsheet",

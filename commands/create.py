@@ -1,4 +1,3 @@
-import asyncio
 from config import config
 
 pending = []
@@ -9,10 +8,10 @@ pending = []
 class Create():
     def __init__(self, message_handler, coach):
         self.command = "create"
+        self.adminRequired = True
         self.message_handler = message_handler
         self.coach = coach
 
-    # Command description
     def get_description(self):
         description = "Create a new tournament with '{}{} <insert name>'.".format(config.BOT_CMD_SYMBOL, self.command)
         return description

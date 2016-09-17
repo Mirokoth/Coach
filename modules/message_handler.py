@@ -32,9 +32,15 @@ print(tournament["id"]) # 3272
 print(tournament["name"]) # My Awesome Tournament
 print(tournament["started-at"]) # None
 
-# Get command list from file (add/remove commands from there do enable/disable them)
 def get_commands():
-	commands = json.load(open(os.path.dirname(DIRECTORY) + '\\commands\\commands.json'))
+	# Get all commands from the commands definition
+	allCommands = json.load(open(os.path.dirname(DIRECTORY) + '\\commands\\definition.json'))
+	# Enable commands based on user config
+	commands = {}
+	for command in allCommands:
+		# Enabled
+		if config.ENABLED_COMMANDS[command] == True:
+			commands[command] = allCommands[command]
 	return commands
 
 class message_handler():
@@ -53,27 +59,47 @@ class message_handler():
 
 	# Message received
 	async def on_message(self, message):
-		CMDS = json.load(open(os.path.dirname(DIRECTORY) + '\\commands\\commands.json')) # Load list of commands and .py locations
+		""" Read messages from Discord and process any commands found
+
+		Args:
+			message (obj):	Discord message object
+
+		"""
+
+		# Command found
 		if input.isCmd(message.content):
 			# Log command to console
 			command = input.getCmd(message.content)
 			arguments = input.getArgs(message.content)
 			print("{} ({}) used the following command: {}".format(message.author.name, message.author.id, command))
+
+		# Command not found
 		else:
 			return
 
+		match = False
 		# Match against command list
 		for plugin in self.plugin_instances:
-			if command.title() == plugin:
-				# Send command to module
-				await self.plugin_instances[command.title()].on_message(message, command, arguments)
-		# Command not found
-		else:
-			print("That ain't a command! Type {}help for more information.".format(BOT_CMD_SYMBOL))
 
-	# async def get_commands():
-	# 	CMDS = json.load(open(os.path.dirname(DIRECTORY) + '\\commands\\commands.json'))
-	# 	# For each command in the command dictionary
-	# 	for separate_command in CMDS:
-	# 		script = import_module(str(CMDS[separate_command]))
-	# 		await script.get_description() # Send message to module
+			# Valid command
+			if command.title() == plugin:
+
+				# Admin required and user is admin
+				if self.plugin_instances[command.title()].adminRequired == True and self.coach.permissions.isAdmin(message.author):
+				    # Send command to module
+					match = True
+					await self.plugin_instances[command.title()].on_message(message, command, arguments)
+
+				# Admin not required
+				elif self.plugin_instances[command.title()].adminRequired == False:
+					# Send command to module
+					match = True
+					await self.plugin_instances[command.title()].on_message(message, command, arguments)
+
+				# Command not allowed
+				else:
+					pass
+
+		# Invalid command
+		if match == False:
+			print("That ain't a command! Type {}help for more information.".format(BOT_CMD_SYMBOL))
