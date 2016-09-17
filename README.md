@@ -28,11 +28,11 @@ _Coming soon!_
 ## Features / To do
 
 - [x] List active tournaments created by your account
+- [x] Configurable access control for each command
 - [ ] (DEV) Background task to monitor specified tournaments
-- [ ] (DEV) Access control
 - [ ] (DEV) Start a pending tournament
 - [ ] (DEV) Support batch participant updates from a Google Sheet
-- [ ] Configurable access control for GM's
+- [ ] Access control for specific users for specific tournaments
 - [ ] Ping captains of upcoming matches via Discord
 - [ ] Support participant updates
 - [ ] Support tournaments created by your organisation/subdomain
