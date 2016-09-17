@@ -83,9 +83,22 @@ class message_handler():
 
 			# Valid command
 			if command.title() == plugin:
-				match = True
-				# Send command to module
-				await self.plugin_instances[command.title()].on_message(message, command, arguments)
+
+				# Admin required and user is admin
+				if self.plugin_instances[command.title()].adminRequired == True and self.coach.permissions.isAdmin(message.author):
+				    # Send command to module
+					match = True
+					await self.plugin_instances[command.title()].on_message(message, command, arguments)
+
+				# Admin not required
+				elif self.plugin_instances[command.title()].adminRequired == False:
+					# Send command to module
+					match = True
+					await self.plugin_instances[command.title()].on_message(message, command, arguments)
+
+				# Command not allowed
+				else:
+					pass
 
 		# Invalid command
 		if match == False:

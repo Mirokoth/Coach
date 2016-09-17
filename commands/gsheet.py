@@ -12,6 +12,7 @@ GSHEET_URL = config.GSHEET_URL
 class Gsheet():
     def __init__(self, message_handler, coach):
         self.command = "gsheet"
+        self.adminRequired = True
         self.message_handler = message_handler
         self.coach = coach
 

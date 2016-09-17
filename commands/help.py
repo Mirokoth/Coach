@@ -8,6 +8,8 @@ from config import config
 # Command: Return documentation regarding all available commands
 class Help():
     def __init__(self, message_handler, coach):
+        self.command = "help"
+        self.adminRequired = False
         self.message_handler = message_handler
         self.coach = coach
 

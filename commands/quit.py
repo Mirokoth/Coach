@@ -5,6 +5,7 @@ class Quit():
 
     def __init__(self, message_handler, coach):
         self.command = "quit"
+        self.adminRequired = True
         self.message_handler = message_handler
         self.coach = coach
 

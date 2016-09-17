@@ -1,6 +1,7 @@
 class Example():
     def __init__(self, message_handler, coach):
         self.command = "command"
+        self.adminRequired = True
         self.message_handler = message_handler
         self.coach = coach
 

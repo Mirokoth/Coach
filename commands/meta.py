@@ -5,6 +5,7 @@ from config import config
 class Meta():
     def __init__(self, message_handler, coach):
         self.command = "meta"
+        self.adminRequired = False
         self.message_handler = message_handler
         self.coach = coach
 
