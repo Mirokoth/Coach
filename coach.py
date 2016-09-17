@@ -19,13 +19,20 @@ class Coach(discord.Client):
     # Bot Ready
     async def on_ready(self):
         # Log some startup information
-        print('Logged in as {} ({}) with the following connected servers..'.format(self.user.name, self.user.id))
+        print('Logged in as {} ({})'.format(self.user.name, self.user.id))
+        print('------')
+        print("Servers")
         print('------')
         for server in self.servers:
-            print('{} ({})'.format(server.name, server.id))
-        # Cache server list
-        for server in self.servers:
-            server_list.append(server)
+            self.server = server
+            print('  {} ({})'.format(server.name, server.id))
+        self.permissions = AccessController(self)
+        print('------')
+        print("Roles for " + server.name)
+        print('------')
+        roles = self.server.roles
+        for role in roles:
+            print("  {} ({})".format(role.name, role.id))
         print('------')
         print('Get this guy a jockstrap and a cookie!')
         print('------')
