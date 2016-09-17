@@ -1,17 +1,14 @@
-# python modules
-import asyncio
-# third-party modules
 import challonge
-# config
 from config import config
 
+# Command: Start a tournament
 class Start():
+
     def __init__(self, message_handler, coach):
         self.command = "start"
         self.message_handler = message_handler
         self.coach = coach
 
-    # Command description
     def get_description(self):
         description = "Start a tournament.".format(config.BOT_CMD_SYMBOL, self.command)
         return description
