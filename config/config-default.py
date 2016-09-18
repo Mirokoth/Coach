@@ -14,6 +14,7 @@ COMMAND_LOG = "log.txt" # Log file name
 
 # Application settings
 BOT_CMD_SYMBOL = "!" # Symbol prefix used to trigger bot commands
+QUOTE_ON_QUIT = True
 
 ADMIN_ROLE_IDS = [
     "<roleID>",

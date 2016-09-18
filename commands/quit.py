@@ -1,6 +1,7 @@
 from importlib import import_module
+from config import config
 
-# Command: Send some final words and restart the bot
+# Command: Stop the bot
 class Quit():
 
     def __init__(self, message_handler, coach):
@@ -15,7 +16,8 @@ class Quit():
 
     async def on_message(self, message, command, arguments):
         # Send a random quote
-        quote = import_module('modules.quote').getQuote()
-        await self.coach.forward_message(message.channel, '{}'.format(quote))
+        if config.QUOTE_ON_QUIT == True:
+            quote = import_module('modules.quote').getQuote()
+            await self.coach.forward_message(message.channel, '{}'.format(quote))
         # Quit
         quit()
