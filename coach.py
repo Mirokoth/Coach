@@ -39,6 +39,11 @@ class Coach(discord.Client):
         print('------')
         print('Bot user ID: {}'.format(self.user.id))
 
+        # Instantiate message handler
+        # TODO: Move this to __init__
+        # TODO: Instantiate per server ID
+        self.message_handler = message_handler(self)
+
     # Send message to handler
     async def forward_message(self, *args, **kwargs):
         return await self.send_message(*args, **kwargs)
@@ -49,10 +54,6 @@ class Coach(discord.Client):
             # Send command to message_handler for processing
             # asyncio.ensure_future(self.message_handler.on_message(message))
             # loop = asyncio.get_event_loop()
-
-            # Instantiate message handler
-            # TODO: Move this to __init__
-            self.message_handler = message_handler(self)
 
             # Pass message to the message handler
             self.loop.create_task(self.message_handler.on_message(message))
