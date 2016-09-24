@@ -5,9 +5,9 @@ import discord
 # custom modules
 from modules.message_handler import message_handler
 from modules.permissions import AccessController
+from modules.challonge_poller import Poller
 # config
 from config import config
-server_list = []
 
 '''
 Inherit and override the discord.Client class
@@ -38,6 +38,9 @@ class Coach(discord.Client):
         print('Get this guy a jockstrap and a cookie!')
         print('------')
         print('Bot user ID: {}'.format(self.user.id))
+        challonge_poller = Poller(self)
+        self.loop.create_task(challonge_poller.background_scan())
+
 
         # Instantiate message handler
         # TODO: Move this to __init__
