@@ -48,9 +48,12 @@ class message_handler():
 	# Set message to message
 	def __init__(self, coach):
 		self.coach = coach
+		self.commandStates = {}
+
 		# Get command list
 		commands = get_commands()
 		self.plugin_instances = {} # Empty dictionary for caching plugins
+
 		# Dynamically load modules based on command list
 		for command in commands:
 			plugin = import_module(commands[command]) # load module
@@ -103,3 +106,40 @@ class message_handler():
 		# Invalid command
 		if match == False:
 			print("That ain't a command! Type {}help for more information.".format(BOT_CMD_SYMBOL))
+
+	def getCommandState(self, command, userId):
+		"""Get command state for a user
+
+		Args:
+			command (string): 	Command name
+			userId (string):	Unique user ID
+
+		Returns:
+			bool: True if this command is in progress for this user, False if not.
+
+		"""
+		return self.commandStates.get(command)
+
+	def commandInProgress(self, command, userId):
+		"""Confirm whether a command is in progress for a user
+
+		Args:
+			command (string): 	Command name
+			userId (string):	Unique user ID
+
+		Returns:
+			bool: True if this command is in progress for this user, False if not.
+
+		"""
+		if self.commandStates.get(command) == None:
+				return False
+		elif self.commandStates[command].get(userId) == None:
+				return False
+		return True
+
+	def setCommandState(self, command, userId, state):
+		"""Set command state for a user
+		"""
+		if self.commandStates.get(command) == None:
+			self.commandStates[command] = {}
+		self.commandStates[command][userId] = state
