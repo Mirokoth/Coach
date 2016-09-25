@@ -38,14 +38,12 @@ class Coach(discord.Client):
         print('Get this guy a jockstrap and a cookie!')
         print('------')
         print('Bot user ID: {}'.format(self.user.id))
-        challonge_poller = Poller(self)
-        self.loop.create_task(challonge_poller.background_scan())
-
-
         # Instantiate message handler
         # TODO: Move this to __init__
         # TODO: Instantiate per server ID
         self.message_handler = message_handler(self)
+        if config.CHAL_POLL_ENABLED == True:
+            self.loop.create_task(Poller(self).background_scan())
 
     # Send message to handler
     async def forward_message(self, *args, **kwargs):

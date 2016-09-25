@@ -19,6 +19,7 @@ COMMAND_LOG = "log.txt" # Log file name
 
 # Application settings
 BOT_CMD_SYMBOL = "!" # Symbol prefix used to trigger bot commands
+CHAL_POLL_ENABLED = False # Enable Challonge polling for events (ie. Tournament completed)
 CHAL_POLL_FREQUENCY = 30 # Frequency in seconds to poll Challonge tournaments for changes (default: 30, number in seconds)
 FORFEIT_TIMEOUT = 30 # Number of minutes a team has until they forfeit a match. The counter begins once the match is announced.
 QUOTE_ON_QUIT = True # Will Coach send a random quote to the channel when and administrator calls the "quit" command

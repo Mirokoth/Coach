@@ -11,6 +11,10 @@ class Sms():
         self.message_handler = message_handler
         self.coach = coach
 
+    def get_description(self):
+        description = "Send an SMS"
+        return description
+
     async def on_message(self, message, command, arguments):
         client = TwilioRestClient(config.TWIL_ACCOUNT_SID, config.TWIL_AUTH_TOKEN)
         txtContent = ''
