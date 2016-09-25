@@ -37,5 +37,6 @@ ENABLED_COMMANDS = { # Enable/disable commands
     "Help": True,
     "Meta": True,
     "Quit": True,
-    "Sms": False
+    "Sms": False,
+    "Start": True
 }

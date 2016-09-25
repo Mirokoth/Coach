@@ -36,7 +36,7 @@ class Create():
         else:
             # No arguments
             if arguments == False:
-                await self.coach.forward_message(message.channel, self.description)
+                await self.coach.forward_message(message.channel, self.get_description())
 
             # Arguments
             else:
