@@ -13,26 +13,47 @@ class Start():
         description = "Start a tournament.".format(config.BOT_CMD_SYMBOL, self.command)
         return description
 
-    # Process command
     async def on_message(self, message, command, arguments):
-        # await self.coach.forward_message(message.channel, "Please add the ID of the tournament you wish to see. ie. If the URL is **http://challonge.com/test** then type **'{}{} test**'".format(config.BOT_CMD_SYMBOL, command.lower()))
+        tournaments = challonge.tournaments.index()
 
+        # No tournament specified
         if arguments == False:
-            print('no arguments')
-            # tournaments = challonge.tournaments.index()
-            # # Verify null response
-            # if len(tournaments) > 0:
-            output = "Here's a list of pending tournaments:```"
-            for tournament in challonge.tournaments.index():
-                # check for state = pending?
-                output += "{} (http://challonge.com/{})\n".format(tournament["name"], tournament["name"])
-            output += "```"
-            await self.coach.forward_message(message.channel, output)
+
+            # No pending tournaments
+            if len(tournaments) == 0:
+                res = "No tournaments pending."
+                await self.coach.forward_message(message.channel, res)
+
+            # There are pending tournaments
+            else:
+                # Return a list of pending tournaments
+                output = "Choose a tournament to start - here's a list of pending tournaments:```"
+                for tournament in tournaments:
+                    if tournament["state"] == "pending":
+                        output += "{} (http://challonge.com/{})\n".format(tournament["name"], tournament["name"])
+                output += "```"
+                await self.coach.forward_message(message.channel, output)
+
+        # Check if the tournament provided is valid
+        else:
+            exists = False
+            pending = False
+            for tournament in tournaments:
+                if tournament["name"].upper() == arguments[0].upper():
+                    exists = True
+                    if tournament["state"] == "pending":
+                        pending = True
+
+            print(exists, pending, tournament["name"])
+
+            # Tournament is valid
+            if exists == True and pending == True:
                 # output += "\nWarning: You are about to start the **{}** tournament. Are you sure? (yes or no)".format(tournament["name"])
+                await self.coach.forward_message(message.channel, "Starting!")
 
-            # tournament = challonge.tournaments.show(arguments[0])
-            # await self.coach.forward_message(message.channel, "***Tournament details:***```ID: {}\nName: {}\nStarted at: {}\nState: {}```".format(tournament["id"],tournament["name"],tournament["started-at"],tournament["state"]))
-
-        # else:
-        #     try:
-        #         tournament = challonge.tournaments.show(arguments[0])
+            # Tournament doesn't exist
+            elif exists == False:
+                await self.coach.forward_message(message.channel, "That tournament doesn't exist!")
+            # Tournament already started
+            elif pending == False:
+                await self.coach.forward_message(message.channel, "That tournament has already started!")
