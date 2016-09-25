@@ -6,6 +6,10 @@ class Admin():
         self.message_handler = message_handler
         self.coach = coach
 
+    def get_description(self):
+        description = "Determine whether you are an administrator"
+        return description
+
     async def on_message(self, message, command, arguments):
         isAdmin = self.coach.permissions.isAdmin(message.author)
         if isAdmin == True:
