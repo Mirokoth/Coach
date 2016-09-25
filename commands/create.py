@@ -1,7 +1,5 @@
 from config import config
 
-pending = []
-
 # Command: Create a tournament
 # TODO: Implement a check to confirm creation
 # TODO: Allow additional parameters and feedback
@@ -16,27 +14,48 @@ class Create():
         description = "Create a new tournament with '{}{} <insert name>'.".format(config.BOT_CMD_SYMBOL, self.command)
         return description
 
-    # Process command
     async def on_message(self, message, command, arguments):
-        # No arguments
-        if arguments == False:
-            await self.coach.forward_message(message.channel, "Gimme arguments brah.")
-        # Arguments
+        userId = message.author.id
+
+        # Continue creation process
+        if self.message_handler.commandInProgress(self.command, userId) == True:
+            # TODO: Add state switches
+            print(self.message_handler.getCommandState(self.command, userId))
+            print("Start command is in progress for " + userId)
+
+            if arguments[0].upper() == "Y" or arguments[0].upper() == "YES":
+                await self.coach.forward_message(message.channel, "Will add this to the backburner for you.")
+            elif arguments[0].upper() == "N" or arguments[0].upper() == "NO":
+                await self.coach.forward_message(message.channel, "Won't bother then.")
+            else:
+                await self.coach.forward_message(message.channel, "..Yes or no?")
+
+            # TODO: Send request to API
+
+        # Start new creation process
         else:
-            name = arguments[0]
-            url = arguments[0]
-            pending.append({'userId': message.author.id, 'type': 'create', 'action': [name, url]})
-            await self.coach.forward_message(message.channel, "Are you sure you want to create a tournament called {}? Enter **y** or **n**.".format(name))
-            for job in pending:
-                print(job['userId'])
-                print(job['type'])
-                print(job['action'])
+            # No arguments
+            if arguments == False:
+                await self.coach.forward_message(message.channel, self.description)
+
+            # Arguments
+            else:
+                name = arguments[0]
+                url = "beta-" + arguments[0]
+                # Set the first command state for this user
+                self.message_handler.setCommandState(self.command, userId, 1)
+                # pending.append({'userId': userId, 'type': 'create', 'action': [name, url]})
+                await self.coach.forward_message(message.channel, "Are you sure you want to create a tournament called {}? Enter **yes** or **no**.".format(name))
+                # for job in pending:
+                #     print(job['userId'])
+                #     print(job['type'])
+                #     print(job['action'])
 
 # Previous WIP below
 # # Confirm command confirmation
 # elif message.content.upper() == "Y":
 #     for job in pending:
-#         if job['userId'] == message.author.id:
+#         if job['userId'] == userId:
 #             # Create tournament
 #             if job['type'] == 'create':
 #                 print(job['action'])
@@ -50,7 +69,7 @@ class Create():
 # # Decline command confirmation
 # elif message.content.upper() == "N":
 #     for job in pending:
-#         if job['userId'] == message.author.id:
+#         if job['userId'] == userId:
 #             await client.forward_message(message.channel, "Cancelling your fucking request.")
 #             # Create tournament
 #             # if job['type'] == 'create':
