@@ -15,6 +15,7 @@ class Start():
         return description
 
     async def on_message(self, message, command, arguments):
+        await self.coach.send_typing(message.channel)
         tournaments = challonge.tournaments.index()
 
         # No tournament specified
@@ -28,7 +29,7 @@ class Start():
             # There are pending tournaments
             else:
                 # Return a list of pending tournaments
-                output = "Choose a tournament to start - here's a list of pending tournaments:```"
+                output = "Choose a tournament to start with **{}{} <tournament name>**. Here's a list of pending tournaments:```".format(config.BOT_CMD_SYMBOL, self.command)
                 for tournament in tournaments:
                     if tournament["state"] == "pending":
                         output += "{} (http://challonge.com/{})\n".format(tournament["name"], tournament["name"])
@@ -37,24 +38,68 @@ class Start():
 
         # Check if the tournament provided is valid
         else:
-            exists = False
-            pending = False
-            for tournament in tournaments:
-                if tournament["name"].upper() == arguments[0].upper():
-                    exists = True
-                    if tournament["state"] == "pending":
-                        pending = True
+            userId = message.author.id
+            requested_confirmation = self.message_handler.commandInProgress(self.command, userId)
 
-            print(exists, pending, tournament["name"])
+            # Confirmation was requested
+            if requested_confirmation == True:
 
-            # Tournament is valid
-            if exists == True and pending == True:
-                # output += "\nWarning: You are about to start the **{}** tournament. Are you sure? (yes or no)".format(tournament["name"])
-                await self.coach.forward_message(message.channel, "Starting!")
+                # Received confirmation
+                if arguments[0].upper() == "Y" or arguments[0].upper() == "YES":
+                    await self.coach.forward_message(message.channel, "Starting..")
+                    await self.coach.send_typing(message.channel)
 
-            # Tournament doesn't exist
-            elif exists == False:
-                await self.coach.forward_message(message.channel, "That tournament doesn't exist!")
-            # Tournament already started
-            elif pending == False:
-                await self.coach.forward_message(message.channel, "That tournament has already started!")
+                    # Grab the tournament from store
+                    tournamentId = self.message_handler.getCommandState(self.command, userId)
+
+                    # Start the tournament
+                    try:
+                        challonge.tournaments.start(tournamentId)
+                    except challonge.api.ChallongeException as err:
+                        await self.coach.forward_message(message.channel, err)
+                    else:
+                        await self.coach.forward_message(message.channel, "Shit went whack, dawg. Contact someone sustaining elevated levels of authorate'")
+
+                    tournament = challonge.tournaments.show(tournamentId)
+
+                    # Check tournament state
+                    if tournament["state"] != "pending":
+                        self.message_handler.resetCommandState(self.command, userId)
+                        await self.coach.forward_message(message.channel, "Started **{}** successfully!".format(tournament["name"]))
+                    else:
+                        await self.coach.forward_message(message.channel, "Error starting {}!".format(tournament["name"]))
+
+                # Discard request
+                elif arguments[0].upper() == "N" or arguments[0].upper() == "NO":
+                    self.message_handler.resetCommandState(self.command, userId)
+                    await self.coach.forward_message(message.channel, "I never liked you anyway.")
+
+                # Invalid confirmation
+                else:
+                    await self.coach.forward_message(message.channel, "..Yeah-nah?")
+
+                # Clear request for confirmation
+                self.message_handler.resetCommandState(self.command, userId)
+
+            # Confirmation has not been requested yet
+            else:
+                exists = False
+                pending = False
+                for tournament in tournaments:
+                    # Tournament exists
+                    if tournament["name"].upper() == arguments[0].upper():
+                        exists = True
+                        # # Request confirmation
+                        if tournament["state"] == "pending":
+                            pending = True
+                            # Store tournament ID
+                            self.message_handler.setCommandState(self.command, userId, tournament["id"])
+                            await self.coach.forward_message(message.channel, "You are about to start the **{}** tournament. Are you sure? (yes or no)".format(tournament["name"]))
+
+                # Tournament doesn't exist
+                if exists == False:
+                    await self.coach.forward_message(message.channel, "That tournament doesn't exist!")
+
+                # Tournament already started
+                elif pending == False:
+                    await self.coach.forward_message(message.channel, "That tournament has already started!")
