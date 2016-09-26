@@ -118,7 +118,10 @@ class message_handler():
 			bool: True if this command is in progress for this user, False if not.
 
 		"""
-		return self.commandStates.get(command)
+		if self.commandStates.get(command) != None and self.commandStates[command].get(userId) != None:
+			return self.commandStates[command][userId]
+		else:
+			return False
 
 	def commandInProgress(self, command, userId):
 		"""Confirm whether a command is in progress for a user
@@ -143,3 +146,14 @@ class message_handler():
 		if self.commandStates.get(command) == None:
 			self.commandStates[command] = {}
 		self.commandStates[command][userId] = state
+
+	def resetCommandState(self, command, userId):
+		"""Remove the command state for a user
+
+		Args:
+			command (string): 	Command name
+			userId (string):	Unique user ID
+
+		"""
+		if self.commandStates.get(command) != None and self.commandStates[command].get(userId) != None:
+			del self.commandStates[command][userId]
