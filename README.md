@@ -29,14 +29,14 @@ _Coming soon!_
 
 - [x] List active tournaments created by your account
 - [x] Configurable access control for each command
-- [ ] (DEV) Background task to monitor specified tournaments
-- [ ] (DEV) Start a pending tournament
-- [ ] (DEV) Support batch participant updates from a Google Sheet
+- [x] Background task to monitor specified tournaments
+- [x] Start a pending tournament
+- [ ] Support batch participant updates from a Google Sheet (In development)
+- [ ] Create new tournaments (In development)
 - [ ] Access control for specific users for specific tournaments
 - [ ] Ping captains of upcoming matches via Discord
 - [ ] Support participant updates
 - [ ] Support tournaments created by your organisation/subdomain
-- [ ] Create new tournaments
 - [ ] Print current bracket information
 - [ ] Submit win/loss for a round
 - [ ] Create requirements.txt
