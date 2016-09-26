@@ -1,7 +1,7 @@
 {
   "Admin": "commands.dev.admin",
+  "Details": "commands.dev.details",
   "Create": "commands.create",
-  "Details": "commands.details",
   "Gsheet": "commands.gsheet",
   "Help": "commands.help",
   "Meta": "commands.meta",

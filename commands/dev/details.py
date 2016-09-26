@@ -1,6 +1,6 @@
 import challonge
 
-# Command: See all active tournaments and a huge list of all variables
+# Command: See the full response for all active tournaments
 class Details():
     def __init__(self, message_handler, coach):
         self.command = "details"
@@ -19,8 +19,7 @@ class Details():
         # Send details for each active tournament under this account
         for tournament in challonge.tournaments.index():
             count += 1
-            output = "" # String to send
-            # Start the message
+            output = "" 
             output += "\n**Tournament Details** for **{}**:\n ".format(tournament["name"])
             # Append each property in the tournament
             for prop in tournament:
